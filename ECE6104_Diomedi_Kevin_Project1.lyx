@@ -83,6 +83,228 @@ Kevin Diomedi
 \end_layout
 
 \begin_layout Section
+Boris Mover
+\end_layout
+
+\begin_layout Standard
+The Boris mover is given by the 3 step process:
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula 
+\[
+\overrightarrow{v^{-}}=\overrightarrow{v^{n-\frac{1}{2}}}+\frac{q\overrightarrow{E}}{m}\frac{\Delta t}{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Rotation
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula 
+\[
+\overrightarrow{v_{1}}=\overrightarrow{v^{-}}+\overrightarrow{v^{-}}\times\overrightarrow{t}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula 
+\[
+\overrightarrow{v^{+}}=\overrightarrow{v^{-}}+\overrightarrow{v_{1}}\times\overrightarrow{s}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+\begin_inset Formula 
+\[
+\overrightarrow{v^{n+\frac{1}{2}}}=\overrightarrow{v^{+}}+\frac{q\overrightarrow{E}}{m}\frac{\Delta t}{2}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For the present case we will assume electric and magnetic fields given by
+\begin_inset Formula 
+\[
+\overrightarrow{E}=E_{x}\hat{x}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\overrightarrow{B}=B\left(\sin\theta\hat{x}+\cos\theta\hat{z}\right)
+\]
+
+\end_inset
+
+ Which specifies 
+\begin_inset Formula $\overrightarrow{t}$
+\end_inset
+
+ and 
+\begin_inset Formula $\overrightarrow{s}$
+\end_inset
+
+ as 
+\begin_inset Formula 
+\[
+\overrightarrow{t}=\left|\overrightarrow{t}\right|\left(\sin\theta\hat{x}+\cos\theta\hat{z}\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\overrightarrow{s}=\left|\overrightarrow{s}\right|\left(\sin\theta\hat{x}+\cos\theta\hat{z}\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left|\overrightarrow{t}\right|=\tan\left[-\frac{qB\Delta t}{m2}\right]
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left|\overrightarrow{s}\right|=\frac{2\left|\overrightarrow{t}\right|}{1+\left|\overrightarrow{t}\right|^{2}}
+\]
+
+\end_inset
+
+Examining the rotation in more detail, beginning with the cross products:
+\begin_inset Formula 
+\[
+\left|\begin{array}{ccc}
+\hat{x} & \hat{y} & \hat{z}\\
+v_{x}^{-} & v_{y}^{-} & v_{z}^{-}\\
+t_{x} & t_{y} & t_{z}
+\end{array}\right|=\hat{x}\left(v_{y}^{-}t_{z}-v_{z}^{-}t_{y}\right)+\hat{y}\left(v_{z}^{-}t_{x}-v_{x}^{-}t_{z}\right)+\hat{z}\left(v_{x}^{-}t_{y}-v_{y}^{-}t_{x}\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left|\begin{array}{ccc}
+\hat{x} & \hat{y} & \hat{z}\\
+v_{1x} & v_{1y} & v_{1z}\\
+s_{x} & s_{y} & s_{z}
+\end{array}\right|=\hat{x}\left(v_{1y}s_{z}-v_{1z}s_{y}\right)+\hat{y}\left(v_{1z}s_{x}-v_{1x}s_{z}\right)+\hat{z}\left(v_{1x}s_{y}-v_{1y}s_{x}\right)
+\]
+
+\end_inset
+
+The first half rotation becomes:
+\begin_inset Formula 
+\[
+\overrightarrow{v_{1}}=\overrightarrow{v^{-}}+\overrightarrow{v^{-}}\times\overrightarrow{t}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+=\overrightarrow{v^{-}}+\hat{x}\left(v_{y}^{-}\left|\overrightarrow{t}\right|\cos\theta\right)+\hat{y}\left(v_{z}^{-}\left|\overrightarrow{t}\right|\sin\theta-v_{x}^{-}\left|\overrightarrow{t}\right|\cos\theta\right)+\hat{z}\left(-v_{y}^{-}\left|\overrightarrow{t}\right|\sin\theta\right)
+\]
+
+\end_inset
+
+And the second half rotation becomes:
+\begin_inset Formula 
+\[
+\overrightarrow{v^{+}}=\overrightarrow{v^{-}}+\overrightarrow{v_{1}}\times\overrightarrow{s}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+=\overrightarrow{v^{-}}+\hat{x}\left(v_{1y}\left|\overrightarrow{s}\right|\cos\theta\right)+\hat{y}\left(v_{1z}\left|\overrightarrow{s}\right|\sin\theta-v_{1x}\left|\overrightarrow{s}\right|\cos\theta\right)+\hat{z}\left(-v_{1y}\left|\overrightarrow{s}\right|\sin\theta\right)
+\]
+
+\end_inset
+
+Or in component form:
+\begin_inset Formula 
+\[
+v_{1x}=v_{x}^{-}+v_{y}^{-}\left|\overrightarrow{t}\right|\cos\theta
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+v_{1y}=v_{y}^{-}+\left|\overrightarrow{t}\right|\left(v_{z}^{-}\sin\theta-v_{x}^{-}\cos\theta\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+v_{1z}=v_{z}^{-}-v_{y}^{-}\left|\overrightarrow{t}\right|\sin\theta
+\]
+
+\end_inset
+
+ 
+\begin_inset Formula 
+\[
+v_{x}^{+}=v_{x}^{-}+v_{1y}\left|\overrightarrow{s}\right|\cos\theta
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+v_{y}^{+}=v_{y}^{-}+\left|\overrightarrow{s}\right|\left(v_{1z}\sin\theta-v_{1x}\cos\theta\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+v_{z}^{+}=v_{z}^{-}-v_{1y}\left|\overrightarrow{s}\right|\sin\theta
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
 Code
 \end_layout
 
