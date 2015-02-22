@@ -1,0 +1,33 @@
+% script to plot distribution functions
+
+function []= distplt(vx,n,q)
+
+nbins=30;             % number of velocity bins
+vl=-5;                % lower velocity bound
+vu=25;                % upper velocity bound
+dv=(vu-vl)/(nbins-2); % velocity increment
+vl=vl-dv;
+vu=vu+dv;
+dvi=(nbins-1)/(vu-vl);
+dq=abs(q)*dvi;        
+fbin=zeros(30,1);       %initialize distribution function to zero
+vbin=linspace(0, nbins-1, nbins)./dvi + vl; %  velocities at bins
+
+ic=0;
+for i=1:n;
+if vx(i)-vl > 0 
+ic=ic+1;
+vxbin(ic)=(vx(i)-vl).*dvi;    % normalized velocity
+end
+end
+
+jbin=floor(vxbin);
+vbl=vxbin-jbin;
+vbu=1-vbl;
+vbl=vbl*dq;
+vbu=vbu*dq;
+for i=1:ic
+fbin(jbin(i)+1)=fbin(jbin(i)+1)+vbu(i);
+fbin(jbin(i)+2)=fbin(jbin(i)+2)+vbl(i);
+end
+plot(vbin,fbin)
