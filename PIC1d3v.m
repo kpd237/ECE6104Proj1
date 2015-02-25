@@ -1,15 +1,43 @@
-function PIC1d(ng,lx,nt,dt,dx,ne,nb,v0e,v0b,wpe,wpb,qme,qmb,k)
-mov(1:nt)=struct('cdata',[],'colormap',[]);
+%========================================================
+%	PIC1d3v.m
+%		Kevin Diomedi
+%
+%	
+%	Performs 1D spacial 3D velocity Particle in cell 
+%		Simulation on 2 particle species assuming
+%		periodic boundary conditions.
+%
+%========================================================
+
+function PIC1d3v(ng,lx,nt,dt,dx,n1,n2,vd1,vd2,wp1,wp2,qm1,qm2,k,B,theta)
+%	ng = number of grid cells
+%	lx = length of system
+%	nt = number of time steps
+%	dt = size of time step
+%	dx = size of grid cell
+%	n1 = number of particles in species 1
+%	n2 = number of particles in species 2
+%	vd1 = initial drift velocity of species 1
+%	vd2 = initial drift velocity of species 2
+%	wp1 = plasma frequency of species 1
+%	wp2 = plasma frequency of species 2
+%	qm1 = charge to mass ratio of species 1
+%	qm2 = charge to mass ratio of species 2
+%	k = wavenumber of expected max grow rate, used to initial perturbation.
+%	B = magnitude of impressed static magnetic field
+%	theta = polarization angle of impressed static magnetic field
+
+%mov(1:nt)=struct('cdata',[],'colormap',[]);
 eps0=1;
 %column 1 is position, column 2 is velocity
-backparts=zeros(ne,2);
-backmass=wpe^2/qme^2*eps0/ne;
-beamparts=zeros(nb,2);
-beammass=wpb^2/qmb^2*eps0/nb;
+species1=zeros(n1,4);
+spec1mass=wp1^2/qm1^2*eps0/n1;
+species2=zeros(n2,4);
+spec2mass=wp2^2/qm2^2*eps0/n2;
 %Diagnostics vs time matrices
 We=zeros(nt,1);
-kebeam=zeros(nt,1);
-keback=zeros(nt,1);
+kespec2=zeros(nt,1);
+kespec1=zeros(nt,1);
 totalq=zeros(nt,1);
 totalphi=zeros(nt,1);
 totalE=zeros(nt,1);
@@ -17,35 +45,33 @@ totalE=zeros(nt,1);
 E=zeros(ng,1);
 charge=zeros(ng,1);
 %load initial particle position and speed
-backparts(:,1)=linspace(0,lx,ne);
-beamparts(:,1)=linspace(0,lx,nb);
+species1(:,1)=linspace(0,lx,n1);
+species2(:,1)=linspace(0,lx,n2);
 
-backparts(:,2)=v0e;
-beamparts(:,2)=v0b;
+species1(:,2)=vd1;%assign drift vx velocity to particle species1
+species2(:,2)=vd2;%assign drift vx velocity to particle species2
 
 %perturbation to start instability
-beamparts(:,1)=mod(beamparts(:,1)+0.01*sin(k*beamparts(:,1)),lx);
+species1(:,1)=mod(species1(:,1)+0.01*sin(k*species1(:,1)),lx);
+species2(:,1)=mod(species2(:,1)+0.01*sin(k*species2(:,1)),lx);
 
-%calculate charge/field due to ions.
-ioncharge=ones(ng,1);
-ioncharge=-ioncharge*(wpb^2/qmb/nb*20+wpe^2/qme/ne*1);
 for i=1:nt
 	disp(i)
 	
 	%calculate charge from one particle spesies
-	charge =calccharge(backparts,qme,dt,dx,lx,ne,wpe,ng);
+	charge =calccharge(species1,qm1,dt,dx,lx,n1,wp1,ng);
 	%now do for other particle species
-	charge=charge+calccharge(beamparts,qmb,dt,dx,lx,nb,wpb,ng)+ioncharge;
+	charge=charge+calccharge(species2,qm2,dt,dx,lx,n2,wp2,ng);
 	%calculate electric field
 	[E,phi]=efield(charge,dx,ng,lx,eps0,E);
 	%save diagnostics
 	g=figure(1);
 	subplot(3,1,1);
-	scatter(backparts(:,1),backparts(:,2));
+	scatter(species1(:,1),species1(:,2));
 	hold all;
-	scatter(beamparts(:,1),beamparts(:,2));
+	scatter(species2(:,1),species2(:,2));
 	hold off;
-	axis([0 100 -5 30]);
+	axis([0 lx -5 30]);
 	title('Phase Space');
 	legend('Background','Beam');
 	xlabel('x');
@@ -60,11 +86,11 @@ for i=1:nt
 	title('Charge density');
 	xlabel('x');
 	ylabel('Charge Density q/m^2');	
-	mov(i)=getframe(g);
+	%mov(i)=getframe(g);
 	%Electric Field Energy
 	We(i)=eps0*sum(E.^2)/2;
-	kebeam(i)=0.5*beammass*sum(beamparts(:,2).^2);
-	keback(i)=0.5*backmass*sum(backparts(:,2).^2);
+	kespec2(i)=0.5*spec2mass*sum(species2(:,2).^2);
+	kespec1(i)=0.5*Electmass*sum(species1(:,2).^2);
 	totalq(i)=sum(charge);
 	totalphi(i)=sum(phi);
 	totalE(i)=sum(E);
@@ -73,11 +99,11 @@ for i=1:nt
 	if (i==1 || i==100 || i==2500 || i==500)
 		h=figure(2);
 		subplot(3,1,1);
-		scatter(backparts(:,1),backparts(:,2));
+		scatter(species1(:,1),species1(:,2));
 		hold all;
-		scatter(beamparts(:,1),beamparts(:,2));
+		scatter(species2(:,1),species2(:,2));
 		hold off;
-		axis([0 100 -5 30]);
+		axis([0 lx -5 30]);
 		title(strcat('Phase Space at t=',num2str(i*dt)));
 		legend('Background','Beam');
 		xlabel('x');
@@ -98,8 +124,8 @@ for i=1:nt
 	end
 			
 	%accelerate then move both particle species
-	backparts=accelmove(E,backparts,qme,dt,dx,ng,lx);
-	beamparts=accelmove(E,beamparts,qmb,dt,dx,ng,lx);
+	species1=accelmove(E,B,theta,species1,qm1,dt,dx,ng,lx);
+	species2=accelmove(E,B,theta,species2,qm2,dt,dx,ng,lx);
 end
 
 h=figure(3);
@@ -109,12 +135,12 @@ title('Electric Field Energy Evolution');
 ylabel('Energy (J)');
 xlabel('time (s)');
 subplot(3,1,2);
-plot(dt:dt:dt*nt,keback);
+plot(dt:dt:dt*nt,kespec1);
 title('Background Electron Kinetic Energy Evolution');
 ylabel('Energy (J)');
 xlabel('time (s)');
 subplot(3,1,3);
-plot(dt:dt:dt*nt,kebeam);
+plot(dt:dt:dt*nt,kespec2);
 title('Beam Electron Kinetic Energy Evolution');
 ylabel('Energy (J)');
 xlabel('time (s)');
@@ -133,11 +159,11 @@ title('Total Potential Evolution');
 ylabel('Potential (V)');
 xlabel('time (s)');
 subplot(3,1,3);
-plot(dt:dt:dt*nt,kebeam);
+plot(dt:dt:dt*nt,kespec2);
 title('Total Electric Field Evolution');
 ylabel('Electric Field Strength (V/m)');
 xlabel('time (s)');
 saveas(h,'QuantitiesEvolution');
 saveas(h,'QantitiesEvolution.epsc2');
-movie2avi(mov,'ece5160_Project3a.avi','compression','None');
+%movie2avi(mov,'ece5160_Project3a.avi','compression','None');
 end
