@@ -17,7 +17,7 @@ for i=1:size(particle,1);
 	bel_grid =floor(particle(i,1)/dx);%bel(ow)grid
 	abov_grid=bel_grid+1;	 %ab(ove)grid
 	belind=(bel_grid+1);
-	abvin=mod(bel_grid,ng)+1;
+	abvind=mod(bel_grid,ng)+1;
 
 	%Interpolate electric field.
 	%since we have 1 indexing, belind is actually the x value of the grid point above it.
@@ -33,9 +33,9 @@ for i=1:size(particle,1);
 	v1(3)=v1(3)+tmag*(-particle(i,3)*sin(theta));
 	%Second half rotation
 	vp=particle(i,2:4);
-	vp(1)=vp(1)+v1(i,2)*smag*cos(theta);
-	vp(2)=vp(2)+smag*(v1(i,3)*sin(theta)-v1(i,1)*cos(theta));
-	vp(3)=vp(3)+smag*(-v1(i,2)*sin(theta));
+	vp(1)=vp(1)+v1(2)*smag*cos(theta);
+	vp(2)=vp(2)+smag*(v1(3)*sin(theta)-v1(1)*cos(theta));
+	vp(3)=vp(3)+smag*(-v1(2)*sin(theta));
 	%final half E accel
 	particle(i,2:4)=vp;
 	particle(i,2)=particle(i,2)+qmr*dt*Epart/2;
