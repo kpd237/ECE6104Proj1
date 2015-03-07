@@ -13,15 +13,17 @@ tmag=tan(-qmr*B*dt/2);
 smag=2*tmag/(1+tmag^2);
 %for each particle calculate acceleration
 for i=1:size(particle,1);
-	%Find grid above and below particle
-	bel_grid =floor(particle(i,1)/dx);%bel(ow)grid
-	abov_grid=bel_grid+1;	 %ab(ove)grid
-	belind=(bel_grid+1);
-	abvind=mod(bel_grid,ng)+1;
+	xi=particle(i,1);%particle's x position
+	jm1=floor(xi/dx);%multiply by dx for x_(j-1)
+	%add 1 : (jm1+1) multiply by dx for x_(j)
+	
+	%determine index
+	bel=mod(jm1,ng)+1;%must add 1 for because 1 indexing.
+	abo=mod(jm1+1,ng)+1;
 
 	%Interpolate electric field.
 	%since we have 1 indexing, belind is actually the x value of the grid point above it.
-	Epart=E(belind)*(abov_grid*dx-particle(i,1))/dx+E(abvind)*(particle(i,1)-bel_grid*dx)/dx;
+	Epart=E(bel)*((jm1+1)*dx-xi)/dx+E(abo)*(xi-(jm1)*dx)/dx;
 
 	%Boris Mover
 	%First half E accel
