@@ -8,9 +8,11 @@ for i=1:size(particle,1);
 	%Find grid above and below particle using zero indexing.
 	% this allows us to multiply by dx to get the x value at the grid point
 	% also allow the use of mod() to account for periodicity.
-	bel_grid=floor(particle(i,1)/dx);%grid number below (for 1 indexing need to add 1)/
+	i
+	particle(i,1)
+	bel_grid=floor(particle(i,1)/dx)%grid number below (for 1 indexing need to add 1)/
 	%bel_ind will always be between 0 and ng-1
-	abov_grid=bel_grid+1;%index 1 above this, we enforce periodicity
+	abov_grid=bel_grid+1%index 1 above this, we enforce periodicity
 		% by taking mod below in the index.
 	
 	%weight charge to grid, recall bel/abov_grid is 0 indexing to allow dx multi
