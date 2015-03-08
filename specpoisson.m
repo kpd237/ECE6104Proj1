@@ -16,7 +16,7 @@ rho(1)=0;
 %rho=rho*hdx;
 %Take fft and reorder.
 rhok=fft(rho,pow2(nextpow2(length(rho))));
-rhok=fftshift(rhok);
+%rhok=fftshift(rhok);
 rhok(1)=0;
 
 phik(1)=0;
@@ -31,7 +31,8 @@ end
 %rhok=rhok*li;
 %phik=phik*li;
 
-phik=ifftshift(rhok);
+%phik=ifftshift(rhok);
 phi=ifft(phik);
+
 end
 
