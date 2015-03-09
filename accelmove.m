@@ -9,7 +9,7 @@ function particle = accelmove(E,B,theta,particle,qmr,dt,dx,ng,lx)
 %dx - grid spacing
 
 
-tmag=tan(-qmr*B*dt/2);
+tmag=(qmr*B*dt/2);
 smag=2*tmag/(1+tmag^2);
 %for each particle calculate acceleration
 for i=1:size(particle,1);
