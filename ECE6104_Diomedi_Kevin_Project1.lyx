@@ -313,6 +313,574 @@ Implemented in Matlab, see github repository for most current revision of
  code:
 \end_layout
 
+\begin_layout Section
+Validation
+\end_layout
+
+\begin_layout Standard
+Validation of the simulation code is provided in the validate.m file, which
+ provides a thorough test of all subroutines of the simulation to ensure
+ the results can be trusted.
+\end_layout
+
+\begin_layout Subsection
+Accelmove
+\end_layout
+
+\begin_layout Subsubsection
+Particle Movement
+\end_layout
+
+\begin_layout Standard
+The particle mover was tested by varying the initial position and velocity
+ of a single particle in a field-free domain.
+ For this test, there should be no acceleration of velocities and the resultant
+ x position should be known.
+\end_layout
+
+\begin_layout Standard
+First movement in the center of the domain is tested.
+ Given dt=1s, 
+\begin_inset Formula $\overrightarrow{v}=\left[1,5,5\right]m/s$
+\end_inset
+
+ and 
+\begin_inset Formula $x=4.5m$
+\end_inset
+
+, 
+\begin_inset Formula $lx=10$
+\end_inset
+
+, and 
+\begin_inset Formula $ng=100$
+\end_inset
+
+, running accelmove.m passed, returning unmodified velocities and x=5.5m.
+\end_layout
+
+\begin_layout Standard
+Next the right and left periodic boundary conditions were tested by placing
+ a particle at 
+\begin_inset Formula $x=9.9$
+\end_inset
+
+ first with 
+\begin_inset Formula $\overrightarrow{v}$
+\end_inset
+
+ as given in the first test above, then setting 
+\begin_inset Formula $v_{x}=-1m/s$
+\end_inset
+
+ to return the particle to its original location.
+ Both cases pass, first moving from 
+\begin_inset Formula $x=$
+\end_inset
+
+ 9.9m to 0.9m then back to 9.9m.
+\end_layout
+
+\begin_layout Subsection
+Calccharge
+\end_layout
+
+\begin_layout Subsection
+efield
+\end_layout
+
+\begin_layout Subsubsection
+specpoisson.m
+\end_layout
+
+\begin_layout Standard
+This function solves poisson's equation by spectral methods following very
+ closely the fields routine of es1.f.
+\end_layout
+
+\begin_layout Standard
+Three functions were tested to solve this equation
+\begin_inset Formula 
+\[
+\rho_{1}\left(x\right)=\sin\left(\pi x\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\rho_{2}\left(x\right)=\sin\left(\pi x\right)+\cos\left(\pi x\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\rho_{3}\left(x\right)=\sin\left(2\pi x\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\rho_{4}\left(x\right)=\left(\sin^{2}\left(x\right)+\cos\left(x\right)\right)\exp\left(\cos\left(x\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The result for 
+\begin_inset Formula $\rho_{1}$
+\end_inset
+
+ through 
+\begin_inset Formula $\rho_{3}$
+\end_inset
+
+ match exactly as expected as shown in Figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:validate_spec_p1"
+
+\end_inset
+
+,
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:validate_spec_p2"
+
+\end_inset
+
+, and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:validate_spec_p3"
+
+\end_inset
+
+.
+ While 
+\begin_inset Formula $\rho_{4}$
+\end_inset
+
+ is exact to within an additive constant (
+\begin_inset Formula $\phi=\exp\left(\cos x\right)+C)$
+\end_inset
+
+ as shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:validate_spec_p4"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/kpd237/Dropbox/School/15Spr/ECE6104 Computational Plasma/literature_repository/Project1/Q6_sine.epsc2
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset Formula $\rho_{1}$
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:validate_spec_p1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \hspace*{\fill}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/kpd237/Dropbox/School/15Spr/ECE6104 Computational Plasma/literature_repository/Project1/Q6_sinecosine.epsc2
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset Formula $\rho_{2}$
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:validate_spec_p2"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Spectral Solver Validation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/kpd237/Dropbox/School/15Spr/ECE6104 Computational Plasma/literature_repository/Project1/Q6_2pifreq.epsc2
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset Formula $\rho_{3}$
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:validate_spec_p3"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \hspace*{\fill}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename /home/kpd237/Dropbox/School/15Spr/ECE6104 Computational Plasma/literature_repository/Project1/Q6_exp_cos_x.epsc2
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset Formula $\rho_{4}$
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:validate_spec_p4"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Spectral Solver Validation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Finite Difference Periodic Boundary Conditions
+\end_layout
+
+\begin_layout Standard
+After calculating the charge density, efields.m performs a centered finite
+ differencing to calculate the electric field assuming periodic boundary
+ conditions.
+ Two cases were tested to validate this algorithm,
+\begin_inset Formula 
+\[
+\phi_{1}=\sin\left(\pi x\right)
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\phi_{2}=\exp\left(\cos x\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:validate_FD_phi1"
+
+\end_inset
+
+ shows 
+\begin_inset Formula $\phi_{1}$
+\end_inset
+
+ and Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:validate_FD_phi2"
+
+\end_inset
+
+ shows 
+\begin_inset Formula $\phi_{2}$
+\end_inset
+
+ both successfully obtained from the FDTD routine.
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename validate_FD_1.epsc2
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset Formula $\phi_{1}$
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:validate_FD_phi1"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset space \hspace*{\fill}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename validate_FD_2.epsc2
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+\begin_inset Formula $\phi_{2}$
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:validate_FD_phi2"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Finite Difference Validation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Part
 Simulation Results
 \end_layout
@@ -321,8 +889,212 @@ Simulation Results
 Upper Hybrid Two-Stream Instability
 \end_layout
 
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Upper HybridEnergyEvolution.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Upper Hybrid Energy Evolution
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Upper HybridQantitiesEvolution.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Upper Hybrid Quantity Evolution
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Upper HybridPhaseECharget500.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Upper Hybrid Phase Space at t=66s 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Section
 Modified Two-Stream Instability
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Lower HybridEnergyEvolution.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Lower Hybrid Energy Evolution
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Lower HybridQantitiesEvolution.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Lower Hybrid Quantity Evolution
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Lower HybridPhaseECharget500.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Lower Hybrid Phase Space at t=66s 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \end_body
