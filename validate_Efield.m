@@ -1,5 +1,8 @@
 %=====================================
-% efield - FD Electric field solver
+% validate_efield - FD Electric field solver
+%	Kevin Diomedi
+%
+%	Validate efield FD routine.
 %=====================================
 ng=512;
 L=2;
