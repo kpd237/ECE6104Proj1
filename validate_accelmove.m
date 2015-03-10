@@ -104,5 +104,49 @@ particle=zeros(1,4);%columns 1-xn 2-vx 3-vy 4-vz
 	
 
 %now test BC by performing the above at right end
+	E=zeros(ng,1);
+	particle(1,:)=[ng*dx 0 0 0];%intial position x
+	E(ng)=8;%E 1 cell below particle, should not affect it.
+	particle = accelmove(E,B,theta,particle,qmr,dt,dx,ng,lx);
+	assert(abs(particle(1,1)-0)<err,'EField Accelerator - right bc position 2 grid below test fail');
+	assert(abs(particle(1,2)-0)<err,'EField Accelerator - right bc vx 2 grid below test fail');
+	%on - should now move particle.
+	E(1)=8;
+	particle = accelmove(E,B,theta,particle,qmr,dt,dx,ng,lx);
+	testx=mod(0+qmr*E(1),lx);
+	assert(abs(particle(1,1)-testx)<err,'EField Accelerator - right bc grid above test fail');
+	assert(abs(particle(1,2)-(-E(1)))<err,'EField Accelerator - right bc vx grid above test fail');
 
-%now at left end
+	%then test weighting by placing particle in center and setting E to be negative above and below
+		%should be no acceleration
+	particle(1,:)=[(ng-1+0.5)*dx 0 0 0];
+	E=zeros(ng,1);
+	E(1)=-5;%cell below
+	E(ng)=5;%cell above
+	particle = accelmove(E,B,theta,particle,qmr,dt,dx,ng,lx);
+	assert(abs(particle(1,1)-dx*(ng-1+0.5))<err,'EField Accelerator - right bc No movement, balanced E test fail');
+	assert(abs(particle(1,2)-0)<err,'EField Accelerator - right bc vx No movement, balanced E test fail');
+
+%now left it doesn't need to be tested...
+
+%=====================================
+% Magnetic field acceleration
+%=====================================
+%Largest error comes out of here.
+err=0.01
+theta=0;
+qmr=-1;
+dt=1;
+lx=10;
+ng=100;
+E=zeros(ng,1);
+B=0.3;
+dx=lx/ng;
+particle=[0 0 1 0]%columns 1-xn 2-vx 3-vy 4-vz
+particle = accelmove(E,B,theta,particle,qmr,dt,dx,ng,lx)
+newvx=qmr*B
+	assert(abs(particle(1,2)-newvx)<err,'Mag Field Accel - Vx test fail');
+	assert(abs(particle(1,3)-1)<err,'Mag Field Accel - Vy test fail');
+	assert(abs(particle(1,4)-0)<err,'Nag Field Accel - Vz test fail');
+
+

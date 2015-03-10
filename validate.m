@@ -14,14 +14,15 @@
 %=====================================
 %Electric Field Finite difference validation
 %=====================================
-%validate_Efield
+validate_Efield;
 
 
 %=====================================
 % accelmove
 %=====================================
-
+validate_accelmove;
 
 %=====================================
 % calc charge
 %=====================================
+validate_charge;
