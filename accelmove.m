@@ -11,6 +11,7 @@ function particle = accelmove(E,B,theta,particle,qmr,dt,dx,ng,lx)
 
 tmag=(qmr*B*dt/2);
 smag=2*tmag/(1+tmag^2);
+vp=zeros(1,3);
 %for each particle calculate acceleration
 for i=1:size(particle,1);
 	xi=particle(i,1);%particle's x position
@@ -28,16 +29,12 @@ for i=1:size(particle,1);
 	%Boris Mover
 	%First half E accel
 	particle(i,2)=particle(i,2)+qmr*dt*Epart/2;
-	%First half roation
-	v1=particle(i,2:4);
-	v1(1)=v1(1)+particle(i,3)*tmag*cos(theta);
-	v1(2)=v1(2)+tmag*(particle(i,4)*sin(theta)-particle(i,2)*cos(theta));
-	v1(3)=v1(3)+tmag*(-particle(i,3)*sin(theta));
-	%Second half rotation
-	vp=particle(i,2:4);
-	vp(1)=vp(1)+v1(2)*smag*cos(theta);
-	vp(2)=vp(2)+smag*(v1(3)*sin(theta)-v1(1)*cos(theta));
-	vp(3)=vp(3)+smag*(-v1(2)*sin(theta));
+	vx=particle(i,2);
+	vy=particle(i,3);
+	vz=particle(i,4);
+	vp(1)=vx*(1-tmag*smag*cos(theta)^2)+(vy+tmag*vz*sin(theta))*smag*cos(theta);
+	vp(2)=-vx*cos(theta)*smag+vy*(1-smag*tmag)+vz*smag*sin(theta);
+	vp(3)=vx*tmag*smag*sin(theta)*cos(theta)-smag*sin(theta)*vy+vz*(1-tmag*smag*sin(theta)^2);
 	%final half E accel
 	particle(i,2:4)=vp;
 	particle(i,2)=particle(i,2)+qmr*dt*Epart/2;
