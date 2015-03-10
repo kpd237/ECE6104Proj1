@@ -46,6 +46,7 @@ totalE=zeros(nt,1);
 E=zeros(ng,1);
 charge=zeros(ng,1);
 %load initial particle position and speed
+% DO NOT LOAD WITH LINSPACE THIS WAY - puts an extra particle on the first position, killing periodicity
 %species1(:,1)=linspace(0,lx-0.001,n1);
 %species2(:,1)=linspace(0,lx-0.001,n2);
 dp1=lx/n1;
@@ -57,20 +58,25 @@ species2(:,1)=dp2*ind;
 
 species1(:,2)=vd1;%assign drift vx velocity to particle species1
 species2(:,2)=vd2;%assign drift vx velocity to particle species2
+x=(0:1:ng-1)*dx;
 
 %perturbation to start instability
-%species1(:,1)=mod(species1(:,1)+0.1*sin(k*species1(:,1)),lx);
-%species2(:,1)=mod(species2(:,1)+0.01*sin(k*species2(:,1)),lx);
+species1(:,1)=mod(species1(:,1)+0.01*cos(k*species1(:,1)),lx);
+species2(:,1)=mod(species2(:,1)+0.01*cos(k*species2(:,1)),lx);
 
 for i=1:nt
 	disp(i)
 	
+	%accelerate then move both particle species
+	species1=accelmove(E,B1,theta,species1,qm1,dt,dx,ng,lx);
+	species2=accelmove(E,B2,theta,species2,qm2,dt,dx,ng,lx);
+
 	%calculate charge from one particle spesies
-	charge =calccharge(species1,qm1,dt,dx,lx,n1,wp1,ng)
+	charge =calccharge(species1,qm1,dt,dx,lx,n1,wp1,ng);
 	%now do for other particle species
-	charge=charge+calccharge(species2,qm2,dt,dx,lx,n2,wp2,ng)
+	charge=charge+calccharge(species2,qm2,dt,dx,lx,n2,wp2,ng);
 	%calculate electric field
-	[E,phi]=efield(charge,dx,ng,lx,eps0,E)
+	[E,phi]=efield(charge,dx,ng,lx,eps0,E);
 	%save diagnostics
 	g=figure(1);
 	subplot(3,1,1);
@@ -78,18 +84,18 @@ for i=1:nt
 	hold all;
 	scatter(species2(:,1),species2(:,2));
 	hold off;
-	axis([0 lx -5 5]);
+	axis([0 lx -0.5 1.5]);
 	title('Phase Space');
 	legend('Electrons','Ions');
 	xlabel('x');
 	ylabel('V_x');
 	subplot(3,1,2);
-	plot(E);
+	plot(x,E);
 	title('Electric field');
 	xlabel('x');
 	ylabel('Field Strength V/m');	
 	subplot(3,1,3);
-	plot(charge)
+	plot(x,charge)
 	title('Charge density');
 	xlabel('x');
 	ylabel('Charge Density q/m^2');	
@@ -103,25 +109,25 @@ for i=1:nt
 	totalE(i)=sum(E);
 
 	%Diagnostic screenshot
-	if (i==1 || i==100 || i==2500 || i==500)
+	if (i==1 || i==100 || i==nt || i==500)
 		h=figure(2);
 		subplot(3,1,1);
 		scatter(species1(:,1),species1(:,2));
 		hold all;
 		scatter(species2(:,1),species2(:,2));
 		hold off;
-		axis([0 lx -5 5]);
+		axis([0 lx -0.5 1.5]);
 		title(strcat('Phase Space at t=',num2str(i*dt)));
 		legend('Electrons','Ions');
 		xlabel('x');
 		ylabel('V_x');
 		subplot(3,1,2);
-		plot(E);
+		plot(x,E);
 		title('Electric field');
 		xlabel('x');
 		ylabel('Field Strength V/m');	
 		subplot(3,1,3);
-		plot(charge)
+		plot(x,charge)
 		title('Charge density');
 		xlabel('x');
 		ylabel('Charge Density q/m^2');	
@@ -130,15 +136,14 @@ for i=1:nt
 		saveas(h,strcat(sv,'.epsc2'));
 	end
 			
-	%accelerate then move both particle species
-	species1=accelmove(E,B1,theta,species1,qm1,dt,dx,ng,lx);
-	species2=accelmove(E,B2,theta,species2,qm2,dt,dx,ng,lx);
 end
 h=figure(10);
-semilogy(dt:dt:dt*nt,We);
+plot(dt:dt:dt*nt,10*log10(We));
 title('Electric Field Energy Evolution');
 ylabel('Energy (J)');
 xlabel('time (s)');
+saveas(h,strcat(name,'Efieldgrowth'));
+saveas(h,strcat(name,'Efieldgrowth.epsc2'));
 
 h=figure(3);
 subplot(3,1,1);
