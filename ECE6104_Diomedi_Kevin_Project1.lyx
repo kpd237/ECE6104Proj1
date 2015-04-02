@@ -406,7 +406,13 @@ The particle mover was tested by varying the initial position and velocity
 \end_layout
 
 \begin_layout Standard
-First movement in the center of the domain is tested.
+First, a particle is placed without an initial 
+\begin_inset Formula $v_{x}$
+\end_inset
+
+ velocity and the particle mover is run multiple times to ensure we do not
+ pickup velocity or displacement.
+ Then movement in the center of the domain is tested.
  Given dt=1s, 
 \begin_inset Formula $\overrightarrow{v}=\left[1,5,5\right]m/s$
 \end_inset
@@ -456,7 +462,7 @@ Electric Field Acceleration
 The electric field acceleration was similarly tested by varying the initial
  position of a single particle and the applied electric field.
  The indexing was verified by eliminating all fields except the grid point
- two below the particle.
+ two below the particle which should cause no acceleration to the particle.
  Then the electric field weighting was tested by placing the particle midway
  between to cells with equal and opposite electric fields on the surrounding
  grid points as well as 25% and 75% between grid points.
@@ -2063,6 +2069,8 @@ reference "fig:validate_spec_p4"
 \end_inset
 
 .
+ This is to be expected since the 0th mode which contains DC components
+ is set to zero to prevent division by zero.
 \end_layout
 
 \begin_layout Standard
@@ -2583,12 +2591,56 @@ The fully integrated simulation cycle was validated by attempting to simulate
  during the cycle.
 \end_layout
 
+\begin_layout Standard
+This test was not run successfully.
+\end_layout
+
 \begin_layout Part
 Simulation Results
 \end_layout
 
 \begin_layout Section
 Upper Hybrid Two-Stream Instability
+\end_layout
+
+\begin_layout Standard
+Despite each individual component passing validation, the full program was
+ unable to successfully run.
+ As discussed in a moment, it appears as if there is some scaling factor
+ error somewhere in the code.
+\end_layout
+
+\begin_layout Standard
+While not producing the desired instability, a number of important diagnostics
+ show promising signs.
+ First as shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Upper-Hybrid-Energy"
+
+\end_inset
+
+, the Upper hybrid case has approximately constant energy.
+ Note the scale in this figure, with essentially zero Electric field and
+ background(Electron) kinetic energy - all energy was contained in the beam(ion)
+ kinetic energy which remained nearly constant.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Upper-Hybrid-Quantity"
+
+\end_inset
+
+ shows that they total charge density is zero to numeric precision (as expected
+ due to quasineutrality).
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Upper-Hybrid-Phase"
+
+\end_inset
+
+ shows the ending phase space diagram for this simulation.
 \end_layout
 
 \begin_layout Standard
@@ -2611,6 +2663,13 @@ status collapsed
 
 \begin_layout Plain Layout
 Upper Hybrid Energy Evolution
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Upper-Hybrid-Energy"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -2647,6 +2706,13 @@ status collapsed
 
 \begin_layout Plain Layout
 Upper Hybrid Quantity Evolution
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Upper-Hybrid-Quantity"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -2671,7 +2737,7 @@ status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
-	filename Upper HybridPhaseECharget500.epsc2
+	filename Upper HybridPhaseECharget1000.epsc2
 
 \end_inset
 
@@ -2682,7 +2748,14 @@ status collapsed
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Upper Hybrid Phase Space at t=66s 
+Upper Hybrid Phase Space at t=133s
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Upper-Hybrid-Phase"
+
+\end_inset
+
+ 
 \end_layout
 
 \end_inset
@@ -2699,8 +2772,389 @@ Upper Hybrid Phase Space at t=66s
 
 \end_layout
 
+\begin_layout Standard
+Figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:largepert_Upper-Hybrid-Energy"
+
+\end_inset
+
+ through 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:largepert_Upper-Hybrid-Phase"
+
+\end_inset
+
+ show results starting from a very large initial perturbation of 0.5 to the
+ x position and 0.25 to the 
+\begin_inset Formula $v_{x}$
+\end_inset
+
+ velocity.
+ Even in this case an instability did not form, instead a periodic wave
+ motion which never broke into the expected vortices which nearly resembled
+ a standing wave pattern was created.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:largepert_Upper-Hybrid-Phase"
+
+\end_inset
+
+ shows a representative sample of the phase space at maximum amplitude 
+\begin_inset Formula $v_{x}$
+\end_inset
+
+ on the electrons.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename largepert_Upper HybridEnergyEvolution.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Large Perturbation Upper Hybrid Energy Evolution
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:largepert_Upper-Hybrid-Energy"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename largepert_Upper HybridQantitiesEvolution.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Large Perturbation Upper Hybrid Quantity Evolution
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:largepert_Upper-Hybrid-Quantity"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename largepert_Upper HybridPhaseECharget100.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Large Perturbation Upper Hybrid Phase Space at t=13s
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:largepert_Upper-Hybrid-Phase"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Only when the charge of the particles was set artificially high was an instabili
+ty realized.
+ Setting the charge of each particle to 
+\begin_inset Formula $\frac{\omega_{p}^{2}e}{ml}$
+\end_inset
+
+ (eliminating the number of particles n from the denominator) caused an
+ instability to grow, but from Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:False Charge Upper Hybrid-Energy-2"
+
+\end_inset
+
+ conservation of energy is not observed.
+ Here a linear growth is observed as shown in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:False Charge Upper Hybrid EGrowth"
+
+\end_inset
+
+ but at a rate of around 0.86 instead of the desired 0.14.	Quasineutraility
+ is observed as evidenced in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:FalseCharge Upper-Hybrid-Quantity"
+
+\end_inset
+
+, but the phase space at the end of the simulation is much more non-linear
+ than expected (Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:False ChargeUpper-Hybrid-Phase"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename FalseCharge_Upper HybridEnergyEvolution.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+False Charge Upper Hybrid Energy Evolution
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:False Charge Upper Hybrid-Energy-2"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename FalseCharge_Upper HybridEfieldgrowth.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+False Charge Upper Hybrid Field Growth
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:False Charge Upper Hybrid EGrowth"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename FalseCharge_Upper HybridQantitiesEvolution.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+False Charge Upper Hybrid Quantity Evolution
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:FalseCharge Upper-Hybrid-Quantity"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename FalseCharge_Upper HybridPhaseECharget1000.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Upper Hybrid Phase Space at t=133s
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:False ChargeUpper-Hybrid-Phase"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since the instability was not succesfully simulated, no attempt was made
+ to calculate the thermal energy.
+ It is expected that they electrons would experience a great increase in
+ thermal energy, while the ions would have a very small increase in thermal
+ energy and slight overall decrease in drift.	
+\end_layout
+
 \begin_layout Section
 Modified Two-Stream Instability
+\end_layout
+
+\begin_layout Standard
+Again, the instability failed to form, but the (physically incorrect!) simulatio
+n results are attached for possible insight into the cause of the simulation
+ error (Figures 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Upper-Hybrid-Energy"
+
+\end_inset
+
+ through 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:largepert_Upper-Hybrid-Phase"
+
+\end_inset
+
+).
 \end_layout
 
 \begin_layout Standard
@@ -2723,6 +3177,13 @@ status open
 
 \begin_layout Plain Layout
 Lower Hybrid Energy Evolution
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Lower-Hybrid-Energy"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -2739,7 +3200,7 @@ Lower Hybrid Energy Evolution
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -2771,7 +3232,7 @@ Lower Hybrid Quantity Evolution
 \begin_inset Float figure
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Graphics
@@ -2787,6 +3248,45 @@ status open
 
 \begin_layout Plain Layout
 Lower Hybrid Phase Space at t=66s 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename Lower HybridEfieldgrowth.epsc2
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Lower Hybrid Electric Field Energy Evolution
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Lower-Hybrid-Energy-Evolv"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset

@@ -24,12 +24,15 @@ nt=1000;%number of time steps
 ne=512;%number of electrons
 ni=512;%number of ions
 wuh=1.5*wpe;%upper hybrid freq
+%wuh=1.4*wpe;
 dt=0.2/wuh;%time step
 dx=L/ng;%grid spacing
 Be=oce/qmre;%magnetic field efect on electrons
 Bi=oci/qmri;%magnetic field effect on ions
 k=wuh/vdi%wave number of maximum growth rate, will be used to initial perturbation.
 name='Upper Hybrid';
+%name='FalseCharge_Upper Hybrid';
+%name='largepert_Upper Hybrid';
 
 PIC1d3v(ng,L,nt,dt,dx,ne,ni,vde,vdi,wpe,wpi,qmre,qmri,k,Be,Bi,theta,name)
 
@@ -39,4 +42,6 @@ L=10*sqrt(2)*pi;
 dx=L/ng;%grid spacing
 k=2*wlh/vdi;
 name='Lower Hybrid'
+%name='FalseCharge_Lower Hybrid'
+%name='largepert_Lower Hybrid'
 PIC1d3v(ng,L,nt,dt,dx,ne,ni,vde,vdi,wpe,wpi,qmre,qmri,k,Be,Bi,theta,name)

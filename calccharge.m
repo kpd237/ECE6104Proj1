@@ -3,6 +3,8 @@ function charge =calccharge(particle,qmr,dt,dx,lx,np,wp,ng)
 %calculates charge from given particle species.
 
 charge=zeros(ng,1);
+q=wp^2/np/qmr/lx;
+%q=wp^2/qmr*lx;%False Charge
 
 for i=1:size(particle,1);
 	xi=particle(i,1);%particle's x position
@@ -15,11 +17,11 @@ for i=1:size(particle,1);
 	
 
 %weight below p_(j-1)=(xj-xi)
-	charge(bel)=charge(bel)+((jm1+1)*dx-xi);
+	charge(bel)=charge(bel)+((jm1+1)*dx-xi)/dx;
 %weight above p_(j)=(xi-x(j-1))
-	charge(abo)=charge(abo)+(xi-jm1*dx);
+	charge(abo)=charge(abo)+(xi-jm1*dx)/dx;
 end
 %multiply by charge of particle
-charge=charge*wp^2/np/qmr/dx/lx;
+charge=charge*q;
 
 end

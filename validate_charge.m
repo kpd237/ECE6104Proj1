@@ -70,3 +70,11 @@ particle=zeros(np,4);%columns 1-xn 2-vx 3-vy 4-vz
 	expabov=wp^2/np/qmr/lx*.75;
 	assert(abs(charge(ng)-expbelow)<err,'Charge - .75dx weighting below test failed');
 	assert(abs(charge(1)-expabov)<err,'Charge - .75dx weighting above test failed');
+
+
+
+%testing proper weighting...
+%this worked as expected.
+%particle=[0 0 0 0]
+%particle(1)=dx/2
+%charge=calccharge(particle,qmr,dt,dx,lx,np,wp,ng);

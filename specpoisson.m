@@ -34,5 +34,8 @@ end
 %phik=ifftshift(rhok);
 phi=ifft(phik);
 
+%aperiodic boundary conditions
+%delphi=0.5/dx*(phi(N)-phi(1));
+%phi=phi+delphi*(0:N-1);
 end
 

@@ -28,7 +28,7 @@ for i=1:size(particle,1);
 
 	%Boris Mover
 	%First half E accel
-	particle(i,2)=particle(i,2)+qmr*dt*Epart/2;
+	particle(i,2)=particle(i,2)+qmr*Epart*dt/2;
 	vx=particle(i,2);
 	vy=particle(i,3);
 	vz=particle(i,4);
@@ -37,7 +37,7 @@ for i=1:size(particle,1);
 	vp(3)=vx*tmag*smag*sin(theta)*cos(theta)-smag*sin(theta)*vy+vz*(1-tmag*smag*sin(theta)^2);
 	%final half E accel
 	particle(i,2:4)=vp;
-	particle(i,2)=particle(i,2)+qmr*dt*Epart/2;
+	particle(i,2)=particle(i,2)+qmr*Epart*dt/2;
 	
 
 end
